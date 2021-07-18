@@ -1,0 +1,32 @@
+<div class="container" appDnd>
+  <input
+    type="file"
+    #fileDropRef
+    id="fileDropRef"
+    multiple
+    (change)="fileBrowseHandler($event)"
+  />
+  <img src="assets/img/ic-upload-file.svg" alt="" />
+  <h3>Drag and drop file here</h3>
+  <h3>or</h3>
+  <label for="fileDropRef">Browse for file</label>
+</div>
+<div class="single-file" *ngIf="file != null">
+	<img src="assets/img/ic-file.svg" width="45px" alt="file" />
+	<div class="info">
+		<h4 class="name">
+			{{ file?.name }}
+		</h4>
+		<p class="size">
+			{{ formatBytes(file?.size) }}
+		</p>
+		<!--app-progress [progress]="file?.progress"></app-progress-->
+	</div>
+	<img
+		src="assets/img/ic-delete-file.svg"
+		class="delete"
+		width="20px"
+		alt="file"
+		(click)="deleteFile()"
+	/>
+</div>
