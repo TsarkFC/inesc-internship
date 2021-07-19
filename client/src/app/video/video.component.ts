@@ -9,6 +9,8 @@ import {
   ElementRef
 } from '@angular/core';
 
+declare var H5PStandalone: any;
+
 @Component({
   selector: 'app-video',
   templateUrl: './video.component.html',
@@ -19,6 +21,13 @@ export class VideoComponent implements OnInit {
 
   constructor() {
     this.file = null;
+
+    const options = {
+      h5pJsonPath: '/assets/h5p-content',
+      frameJs: '/assets/dist/frame.bundle.js',
+      frameCss: '/assets/dist/styles/h5p.css',
+    }
+    new H5PStandalone.H5P(document.getElementById('h5p-container'), options);
   }
 
   ngOnInit(): void {
