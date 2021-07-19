@@ -1,15 +1,22 @@
-<div class="container" appDnd>
+<div id="video-player" *ngIf="file != null">
+	<video width="320" height="240" controls>
+	    <source src="assets/videos/vid.mp4" type="video/mp4">
+	</video>
+</div>
+
+<div class="container" appDnd *ngIf="file == null">
   <input
     type="file"
+	accept="video/mp4,video/x-m4v,video/*"
     #fileDropRef
     id="fileDropRef"
     multiple
     (change)="fileBrowseHandler($event)"
   />
   <img src="assets/img/ic-upload-file.svg" alt="" />
-  <h3>Drag and drop file here</h3>
+  <h3>Drag and drop video here</h3>
   <h3>or</h3>
-  <label for="fileDropRef">Browse for file</label>
+  <label for="fileDropRef">Browse for video</label>
 </div>
 <div class="single-file" *ngIf="file != null">
 	<img src="assets/img/ic-file.svg" width="45px" alt="file" />
@@ -20,7 +27,6 @@
 		<p class="size">
 			{{ formatBytes(file?.size) }}
 		</p>
-		<!--app-progress [progress]="file?.progress"></app-progress-->
 	</div>
 	<img
 		src="assets/img/ic-delete-file.svg"

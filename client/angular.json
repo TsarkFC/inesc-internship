@@ -1,5 +1,8 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": "9576a0f7-f00c-4978-b74e-bef8c3054379"
+  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
@@ -27,6 +30,8 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "./node_modules/@videogular/ngx-videogular/fonts/videogular.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -94,6 +99,8 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "./node_modules/@videogular/ngx-videogular/fonts/videogular.css",
               "src/styles.css"
             ],
             "scripts": []
