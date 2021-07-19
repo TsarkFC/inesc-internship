@@ -1,38 +1,25 @@
-<div id="video-player" *ngIf="file != null">
-	<video width="320" height="240" controls>
-	    <source src="assets/videos/vid.mp4" type="video/mp4">
+<div id="video-player-div" *ngIf="file != null">
+	<div class="button-row">
+		<button mat-raised-button selected id="original-button">Original video</button>
+		<button mat-raised-button id="processed-video">Processed video</button>
+		<button mat-raised-button (click)="deleteFile()" id="new-video">Select new video</button>
+	</div>
+	<video id="video-player" width="640" height="480" controls>
+		<source src="assets/videos/vid.mp4" type="video/mp4">
 	</video>
 </div>
 
-<div class="container" appDnd *ngIf="file == null">
-  <input
-    type="file"
-	accept="video/mp4,video/x-m4v,video/*"
-    #fileDropRef
-    id="fileDropRef"
-    multiple
-    (change)="fileBrowseHandler($event)"
-  />
-  <img src="assets/img/ic-upload-file.svg" alt="" />
-  <h3>Drag and drop video here</h3>
-  <h3>or</h3>
-  <label for="fileDropRef">Browse for video</label>
-</div>
-<div class="single-file" *ngIf="file != null">
-	<img src="assets/img/ic-file.svg" width="45px" alt="file" />
-	<div class="info">
-		<h4 class="name">
-			{{ file?.name }}
-		</h4>
-		<p class="size">
-			{{ formatBytes(file?.size) }}
-		</p>
-	</div>
-	<img
-		src="assets/img/ic-delete-file.svg"
-		class="delete"
-		width="20px"
-		alt="file"
-		(click)="deleteFile()"
+<div id="video-selector" class="container" appDnd *ngIf="file == null">
+	<input
+		type="file"
+		accept="video/mp4,video/x-m4v,video/*"
+		#fileDropRef
+		id="fileDropRef"
+		multiple
+		(change)="fileBrowseHandler($event)"
 	/>
+	<img src="assets/img/ic-upload-file.svg" alt="" />
+	<h3>Drag and drop video here</h3>
+	<h3>or</h3>
+	<label for="fileDropRef">Browse for video</label>
 </div>
