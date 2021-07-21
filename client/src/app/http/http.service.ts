@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class HttpService {
 
-  apiUrl = "/api/endpoint";
+  apiUrl = "http://localhost:8000/api/process/";
   constructor(private httpClient: HttpClient) { }
 
   sendPostRequest(data: Object): Observable<Object> {

@@ -127,9 +127,10 @@ export class VideoComponent implements OnInit {
    * @param file imported video
    */
   sendProcessRequest(file: any) {
+    console.log('request sent');
     this.httpService.sendPostRequest(file).subscribe((responseBody) => {
       console.log(responseBody);
-});
+    });
   }
 
   /**
