@@ -8,17 +8,21 @@ import {
   ViewChild,
   ElementRef
 } from '@angular/core';
+import { HttpService } from '../http/http.service';
 
 @Component({
   selector: 'app-video',
   templateUrl: './video.component.html',
-  styleUrls: ['./video.component.css']
+  styleUrls: ['./video.component.css'],
+  providers: [ HttpService ]
 })
 export class VideoComponent implements OnInit {
   file: any;
+  httpService: HttpService;
 
-  constructor() {
+  constructor(httpService: HttpService) {
     this.file = null;
+    this.httpService = httpService;
   }
 
   ngOnInit(): void {
@@ -96,13 +100,14 @@ export class VideoComponent implements OnInit {
 
     this.file = files[0];
     this.setVideoSource(this.file);
+    this.sendProcessRequest(this.file);
     this.fileDropEl.nativeElement.value = "";
     this.uploadFilesSimulator();
   }
 
   /**
    * Updates the source of the video player
-   * @param file imported videos
+   * @param file imported video
    */
   setVideoSource(file: any) {
     let video = document.getElementById('video-player');
@@ -115,6 +120,16 @@ export class VideoComponent implements OnInit {
     source.setAttribute('src', URL.createObjectURL(file));
     video.innerHTML = '';
     video.appendChild(source);
+  }
+
+  /**
+   * Send a POST Ajax request to process the video
+   * @param file imported video
+   */
+  sendProcessRequest(file: any) {
+    this.httpService.sendPostRequest(file).subscribe((responseBody) => {
+      console.log(responseBody);
+});
   }
 
   /**
