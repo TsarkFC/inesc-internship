@@ -33,7 +33,6 @@ export class VideoComponent implements OnInit {
     e.preventDefault();
     e.stopPropagation();
     this.fileOver = true;
-    console.log('DRAGOVER!');
   }
 
   // Dragleave listener
@@ -41,7 +40,6 @@ export class VideoComponent implements OnInit {
     e.preventDefault();
     e.stopPropagation();
     this.fileOver = false;
-    console.log('DRAGLEAVE!');
   }
 
   // Drop listener
@@ -49,10 +47,7 @@ export class VideoComponent implements OnInit {
     e.preventDefault();
     e.stopPropagation();
     this.fileOver = false;
-    console.log('event', e.dataTransfer);
     this.prepareFile(e.dataTransfer.files);
-    console.log('DROP!');
-    console.log();
   }
 
   /**
@@ -94,15 +89,32 @@ export class VideoComponent implements OnInit {
    * @param files (Files List)
    */
   prepareFile(files: Array<any>) {
-    console.log(files);
     if (files.length > 1) {
       alert('Only one file allowed!');
       return;
     }
 
     this.file = files[0];
+    this.setVideoSource(this.file);
     this.fileDropEl.nativeElement.value = "";
     this.uploadFilesSimulator();
+  }
+
+  /**
+   * Updates the source of the video player
+   * @param file imported videos
+   */
+  setVideoSource(file: any) {
+    let video = document.getElementById('video-player');
+    if (video == null) {
+      console.log('No video player defined!');
+      return;
+    }
+
+    let source = document.createElement('source');
+    source.setAttribute('src', URL.createObjectURL(file));
+    video.innerHTML = '';
+    video.appendChild(source);
   }
 
   /**

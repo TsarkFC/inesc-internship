@@ -38,9 +38,9 @@
 }
 
 #video-player {
-  border: solid 2px #369;
+  box-shadow: 1px 1px 2px black, 0 0 10px black;
   display: block;
-  margin: 0 auto;
+  margin: 15px auto 0 auto;
 }
 
 #video-player-div {

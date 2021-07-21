@@ -1,15 +1,14 @@
-<div id="video-player-div" *ngIf="file != null">
+<div id="video-player-div" [hidden]="file == null">
 	<div class="button-row">
 		<button mat-raised-button selected id="original-button">Original video</button>
 		<button mat-raised-button id="processed-video">Processed video</button>
 		<button mat-raised-button (click)="deleteFile()" id="new-video">Select new video</button>
 	</div>
 	<video id="video-player" width="640" height="480" controls>
-		<source src="assets/videos/vid.mp4" type="video/mp4">
 	</video>
 </div>
 
-<div id="video-selector" class="container" appDnd *ngIf="file == null">
+<div id="video-selector" class="container" appDnd [hidden]="file != null">
 	<input
 		type="file"
 		accept="video/mp4,video/x-m4v,video/*"
