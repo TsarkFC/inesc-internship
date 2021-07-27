@@ -4,7 +4,7 @@
             class="btn btn-outline-primary" 
             data-bs-toggle="button" 
             autocomplete="off" 
-            id="original-button"
+            id="original-video"
             class="control-button">
             Original video
         </button>
@@ -25,5 +25,5 @@
         </button>
 	</div>
 	<video id="video-player" width="640" height="480" controls></video>
-    <img id="processed-video-player" src="{{ url_for('video_feed') }}" width="640" height="480">
+    <img id="processed-player" src="{{ url_for('video_feed') }}" width="640" height="480">
 </div>

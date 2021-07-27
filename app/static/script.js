@@ -4,8 +4,6 @@ const player = document.getElementById('video-player-div');
 const fileDrop = document.getElementById('fileDrop');
 fileDrop.addEventListener('change', (e) => {
   this.prepareFile(e.target.files);
-  //selector.setAttribute('class', 'invisible');
-  //player.setAttribute('class', 'visible');
   selector.style.display = 'none';
   player.style.display = 'block'; 
 });
@@ -14,6 +12,25 @@ const goBack = document.getElementById('new-video');
 goBack.addEventListener('click', (e) => {
   selector.style.display = 'block';
   player.style.display = 'none'; 
+});
+
+const originalVideoToggle = document.getElementById('original-video');
+const processedVideoToggle = document.getElementById('processed-video');
+const originalVideo = document.getElementById('video-player');
+const processedVideo = document.getElementById('processed-player');
+
+originalVideoToggle.addEventListener('click', (e) => {
+  deactivateButton(processedVideoToggle);
+  activateButton(originalVideoToggle);
+  originalVideo.style.display = 'block';
+  processedVideo.style.display = 'none';
+});
+
+processedVideoToggle.addEventListener('click', (e) => {
+  deactivateButton(originalVideoToggle);
+  activateButton(processedVideoToggle);
+  originalVideo.style.display = 'none';
+  processedVideo.style.display = 'block';
 });
 
 /**
@@ -66,4 +83,14 @@ function formatBytes(bytes, decimals = 2) {
   const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+}
+
+function activateButton(element) {
+  element.classList.add('active');
+  element.setAttribute('aria-pressed', 'true');
+}
+
+function deactivateButton(element) {
+  element.classList.remove('active');
+  element.setAttribute('aria-pressed', 'false');
 }
