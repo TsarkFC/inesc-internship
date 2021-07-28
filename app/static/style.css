@@ -77,3 +77,21 @@ h1 {
     display: none;
     margin-top: 2rem;
 }
+
+.btn-outline-primary {
+    background-color: white;
+    border-color: #369;
+    color: #369;
+}
+
+.btn-outline-primary.active {
+    background-color: #369;
+    border-color: #369;
+    color: white;
+}
+
+.btn-outline-primary:hover {
+    background-color: #369;
+    border-color: #369;
+    color: white;
+}

@@ -1,3 +1,5 @@
+let currentFile = '';
+
 const selector = document.getElementById('video-selector');
 const player = document.getElementById('video-player-div');
 
@@ -11,7 +13,8 @@ fileDrop.addEventListener('change', (e) => {
 const goBack = document.getElementById('new-video');
 goBack.addEventListener('click', (e) => {
   selector.style.display = 'block';
-  player.style.display = 'none'; 
+  player.style.display = 'none';
+  //window.location.reload();
 });
 
 const originalVideoToggle = document.getElementById('original-video');
@@ -20,6 +23,7 @@ const originalVideo = document.getElementById('video-player');
 const processedVideo = document.getElementById('processed-player');
 
 originalVideoToggle.addEventListener('click', (e) => {
+  processedVideoToggle.innerHTML = 'Processed video';
   deactivateButton(processedVideoToggle);
   activateButton(originalVideoToggle);
   originalVideo.style.display = 'block';
@@ -27,10 +31,12 @@ originalVideoToggle.addEventListener('click', (e) => {
 });
 
 processedVideoToggle.addEventListener('click', (e) => {
+  processedVideoToggle.innerHTML = 'Restart video';
   deactivateButton(originalVideoToggle);
   activateButton(processedVideoToggle);
   originalVideo.style.display = 'none';
   processedVideo.style.display = 'block';
+  sendPostRequest({file_path: currentFile, restart: 'true'});
 });
 
 /**
@@ -44,7 +50,8 @@ function prepareFile(files) {
 
   const file = files[0];
   setVideoSource(file);
-  sendProcessRequest(file);
+  currentFile = file.name;
+  sendPostRequest({file_path: currentFile, restart: 'false'});
   fileDrop.value = "";
 }
 
@@ -62,13 +69,6 @@ function setVideoSource(file) {
   source.setAttribute('src', URL.createObjectURL(file));
   video.innerHTML = '';
   video.appendChild(source);
-}
-
-/**
- * Send a POST Ajax request to process the video
- */
-function sendProcessRequest(file) {
-  console.log('request sent');
 }
 
 /**
@@ -93,4 +93,20 @@ function activateButton(element) {
 function deactivateButton(element) {
   element.classList.remove('active');
   element.setAttribute('aria-pressed', 'false');
+}
+
+/**
+ * Send a POST Ajax request to process the video
+ */
+const sendPostRequest = (json) => {
+  const request = new XMLHttpRequest();
+  request.open("POST", '/process', true);
+  request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  request.send(encodeForAjax(json));
+}
+
+function encodeForAjax(data) {
+  return Object.keys(data).map(function(k){
+    return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
+  }).join('&')
 }
