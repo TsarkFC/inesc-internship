@@ -6,6 +6,7 @@ app = Flask(__name__)
 cap = cv2.VideoCapture('../6_rgb.mp4')
 path = ''
 shouldRestart = False
+frame_count = 0
 
 @app.route('/')
 def index():
@@ -19,23 +20,21 @@ def video_feed():
 def process():
     global cap
     global path
+    global frame_count
     if request.form['restart'] == 'false':
         path = '../' + request.form['file_path']
         global shouldRestart
         shouldRestart = True
-        #res = cap.open('../' + request.form['file_path'])
-        #print('success restarting video:', res)
-        
-        #cap.release()
-        #cap = cv2.VideoCapture('../' + request.form['file_path'])
     print('restart request:', request.form['restart'])
     print(request.form['file_path'])
     cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+    frame_count = 0
     return Response("request complete", 200)
 
 def gen_frames():
     global cap
     global shouldRestart
+    global frame_count
     _, frame0 = cap.read()
     frame0bw = cv2.cvtColor(frame0,cv2.COLOR_BGR2GRAY)
     frame0gb = cv2.GaussianBlur(frame0bw,(15,15),0)
@@ -45,15 +44,22 @@ def gen_frames():
     limit = 0.35
 
     while True:
+        frame_count += 1
         if shouldRestart:
-            print('path name', path)
+            frame_count = 0
             cap = cv2.VideoCapture(path)
             _, frame0 = cap.read()
             frame0bw = cv2.cvtColor(frame0,cv2.COLOR_BGR2GRAY)
             frame0gb = cv2.GaussianBlur(frame0bw,(15,15),0)
             shouldRestart = False
-
-
+            
+        if frame_count == cap.get(cv2.CAP_PROP_FRAME_COUNT) - 1:
+            cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+            frame_count = 0
+            cap = cv2.VideoCapture(path)
+            _, frame0 = cap.read()
+            frame0bw = cv2.cvtColor(frame0,cv2.COLOR_BGR2GRAY)
+            frame0gb = cv2.GaussianBlur(frame0bw,(15,15),0)
 
         ret, frame1 = cap.read()
 
@@ -109,12 +115,13 @@ def gen_frames():
                         ini = -1
 
         # escrever na imagem o estado de movimento
-        cv2.putText(heatmap, text, (20,50), cv2.FONT_HERSHEY_SIMPLEX, 1.25, (255,255,255) if text != 'Violence' else (0, 0, 255), 3, cv2.LINE_AA)
+        merged = cv2.addWeighted(frame1, 0.5, heatmap, 0.5, 0)
+        cv2.putText(merged, text, (20,50), cv2.FONT_HERSHEY_SIMPLEX, 1.25, (255,255,255) if text != 'Violence' else (0, 0, 255), 3, cv2.LINE_AA)
 
         # atualizar o frame0
         frame0gb = frame1gb
 
-        ret, buffer = cv2.imencode('.jpeg', heatmap)
+        ret, buffer = cv2.imencode('.jpeg', merged)
         frame = buffer.tobytes()
         yield (b'--frame\r\n'
                 b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')

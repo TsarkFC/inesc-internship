@@ -14,7 +14,6 @@ const goBack = document.getElementById('new-video');
 goBack.addEventListener('click', (e) => {
   selector.style.display = 'block';
   player.style.display = 'none';
-  //window.location.reload();
 });
 
 const originalVideoToggle = document.getElementById('original-video');
